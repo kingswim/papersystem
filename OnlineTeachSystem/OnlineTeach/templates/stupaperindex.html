@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+    </head>
+    <body>
+            {% csrf_token %}
+            <a href="{% url 'generateqpaperbef' %}">生成问卷</a><br>
+            <a href="{% url 'generate1Apaper' %}">输入学生编号,生成答卷</a><br>
+            <a href="{% url 'stulookpaper' %}">进入考试</a><br>
+            <a href="{% url 'stulookresult' %}">查看考试情况</a>
+            <br>
+    </body>
+</html>

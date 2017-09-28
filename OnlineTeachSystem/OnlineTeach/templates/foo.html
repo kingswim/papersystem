@@ -1,0 +1,288 @@
+<html>
+<body>
+
+<div id="quizz" class="question">
+    <h2>
+      {% verbatim %}{{ currentQuestion.question }}{% endverbatim %}
+    </h2>
+    <component :key="currentQuestion" :is="currentQuestion.type" :question="currentQuestion" v-model="currentQuestion.answer"></component>
+    Current Question Answer: {% verbatim %}{{ currentQuestion.answer }} {% endverbatim %}
+<div class='button' id='next'><a href='#' @click="next">Next</a></div>
+<div class='button' id='prev'><a href='#' @click="previous">Prev</a>
+<div class='button' id='commitpaper'><a href='#' @click="commitpaper">commitpaper</a>
+</div>
+     <ul id='list2'>
+
+</div>  
+  {% load static%} 
+  <!-- Load Vue script -->
+  <script src="https://vuejs.org/js/vue.js"></script>
+  <script type="text/javascript" src="{% static "jquery-1.9.1.js" %}"></script>
+  <!-- On load, init Vue -->
+  <script>
+console.clear()
+
+const mixedQuestion = {
+
+	props:["value", "question"],
+  template:`<div>
+  	<radio-question :question="question" v-model="units"></radio-question>
+    <text-input-question :question="question" v-model="internalValue"></text-input-question>
+  </div>`
+  ,
+  data(){
+    	return {
+        	internalValue: this.value,
+            units: null
+        }
+    },
+    computed:{
+    	complex(){
+        	return {
+            	units: this.units,
+                value: this.internalValue
+            }
+        }
+    },
+	watch:{
+    	complex(newValue){
+        	this.$emit('input', newValue)
+        }	
+    }
+    
+  
+}
+
+const RadioQuestion = {
+	props:["value", "question"],
+	template:`
+    	<div>
+            <template v-for="label in question.labels">
+                <input type="radio" :id="label" :value="label" v-model="picked">
+                <label :for="label">{% verbatim %}{{label}}{% endverbatim %}</label>
+                <br>		
+            </template>
+        </div>
+    `,
+    data(){
+    	return {
+        	picked: this.value
+        }
+    },
+    watch:{
+    	picked(){
+        	this.$emit("input", this.picked)
+        }
+    }
+}
+Vue.component("RadioQuestion", RadioQuestion)
+
+const textInputQuestion = {
+	props:["value", "question"],
+	template:`
+    	<div>
+			<input type="textarea" v-model="internalValue" @input="onInput" :value="value" />
+        </div>
+    `,
+    data(){
+    	return {
+        	internalValue: this.value
+        }
+    },
+    methods:{
+    	onInput(){this.$emit("input", this.internalValue)}
+    }
+
+}
+   Vue.component("textInputQuestion", textInputQuestion)
+
+
+
+data1= {
+    questions:[
+      {question: 'What is your gender?', type: RadioQuestion, labels:["A.Male", "B.Female"], answer: null},
+        {question:'How old are you?', type: textInputQuestion, answer: null},
+        {question:'what is the problem of jack?', type: textInputQuestion, answer: null},
+        {question:'How many times do you workout per week?', type: textInputQuestion, answer: null},
+        {question:'Insert distance', type: mixedQuestion, labels: ["A.Yards", "B.Miles"], answer: null}
+    ],
+    index:0
+   }
+
+var stuid= "{{stuid}}"
+
+alert(stuid)
+var data2;
+
+ $.ajax({
+       url:'http://127.0.0.1:8000/OnlineTeach/openQpaperjson/?form_stuid='+stuid,
+       type:'GET',
+       async:false,
+       dataType:'json',
+       timeout:1000,
+       cache:false,
+       beforeSend:function(){
+           $("#list2").html('loading');
+       },
+       error:function(){
+           alert('error');
+       },
+       success:function(data){
+         data2=data;
+       },
+   });
+   alert(data2);
+   var newquestions=[];
+   for(var i in data2){
+       var newdict={};
+       var a1=data2[i].Question_description;
+       var typeflag=data2[i].Question_type;
+       if(typeflag==1){
+           var a2=data2[i].Question_label.split("|");
+           alert('-------------------------------------');
+           newdict={question:a1,type:RadioQuestion,labels:a2,answer:null};
+           newquestions[i]=newdict;
+           alert(newdict);
+       }
+       else if(typeflag==2){
+           newdict={question:a1,type:textInputQuestion,labels:a2,answer:null};
+           newquestions[i]=newdict;
+           alert(newquestions);
+       }
+       else{
+           alert("不正常!")
+       }
+
+   }
+   data3={questions:newquestions,index:0}
+   alert('********')
+   alert(newquestions)
+   alert('********')
+   alert(data3.questions[1].question)
+   alert('********')
+
+
+
+
+
+var app1=new Vue({
+  el: '#quizz',
+  data: data3,
+  computed:{
+  	currentQuestion(){
+    	return this.questions[this.index]
+    }
+  },
+  methods:{
+  	next(){
+    	if(this.index + 1 == this.questions.length)
+      	this.index = 0;
+      else
+      	 this.index++;
+
+        alert(this.questions[this.index-1].answer)
+      	
+    },
+    previous(){
+    	
+    	if(this.index - 1 < 0)
+      	this.index = this.questions.length - 1;
+      else
+      	this.index--;
+    },
+    commitpaper(){
+           //var newquestion={}
+           var newquestions=[]
+           //var  newjson={question:newquestions ,id:this.index}
+           newlength=this.questions.length
+           for(var i in this.questions){
+               var newquestion={}
+               newquestion['question']=this.questions[i].question
+               alert(RadioQuestion)
+               if (this.questions[i].type==RadioQuestion)
+                   {
+                       alert(this.questions[i].answer.substr(0,1))
+                       newquestion['answer']=this.questions[i].answer.replace(/[\r\n]/g,"").substr(0,1)
+                   }
+               else if (this.questions[i].type==textInputQuestion)
+                   {
+                       newquestion['answer']=this.questions[i].answer.replace(/[\r\n]/g,"")
+                   }
+               newquestions[i]=newquestion
+           // newjson.newquestions[i]={this.questions[i].question,answer:this.questions[i].answer}
+           }
+        var endquestion ;
+        endquestion={question:newquestions,'stuid':stuid}
+           senddata=JSON.stringify(endquestion)
+           alert(senddata)
+      $.ajax({
+               url:'http://127.0.0.1:8000/OnlineTeach/recieveanswer/ ',
+               type:'POST',
+               data:senddata,
+               dataType:'json',
+               timeout:1000,
+               cache:false,
+               beforeSend:Load1Function,
+               error:erryi1Function,
+               success:succ1Function
+      });
+        function Load1Function(){
+         $("#list2").html('loading');
+        }
+        function erryi1Function(){
+             alert('error');
+        }
+        function succ1Function(tt){
+             alert('send success');
+       }
+    
+    },
+   }
+   })
+   <!-- *********************************** -->
+   $(function () {
+             $.ajax({
+                 url:'http://127.0.0.1:8000/OnlineTeach/generatequiz?form_difficult=easy&form_mark=2&form_chapter=fifth',
+                 type:'GET',
+                 dataType:'json',
+                 timeout:1000,
+                 cache:false,
+                 beforeSend:LoadFunction,
+                 error:erryFunction,
+                 success:succFunction
+             });
+             function LoadFunction(){
+               $("#list2").html('loading');
+             }
+             function erryFunction(){
+                 alert('error');
+             }
+             function succFunction(tt){
+                 var json =eval(tt);
+                 var tt=""
+                 $.each(json,function(index){
+                  var Question_mark_chapter_difficult= json[index].Question_mark_chapter;
+                  var Question_description= json[index].Question_description;
+                  var Question_type= json[index].Question_type;
+                  var Question_feature= json[index].Question_feature;
+                  var Question_point= json[index].Question_point;
+                  var Question_categery= json[index].Question_categery;
+                  var Question_default_answer= json[index].Question_default_answer;
+                  tt += Question_description+"___"+Question_feature+ "___"+Question_point+"___"+Question_type+"<br>";
+                 });
+                var descriptionss=''; 
+                 for (var i in app1){
+                  descriptionss += i+"="+this[i]+"\n"
+                 }
+                 kk=app1.questions
+                 alert(kk)
+                $("#list2").html('');
+                 $("#list2").html(tt);
+                 
+             }
+        });
+
+
+
+  </script>
+</body>

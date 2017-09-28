@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+        {%load static%}
+        <script type="text/javascript" src="{% static "jquery-1.9.1.js" %}"></script>
+        <script type="text/javascript">
+         $(function () {
+             $.ajax({
+                 url:'http://127.0.0.1:8000/OnlineTeach/generatequiz?form_difficult=easy&form_mark=2&form_chapter=fifth',
+                 type:'GET',
+                 dataType:'json',
+                 timeout:1000,
+                 cache:false,
+                 beforeSend:LoadFunction,
+                 error:erryFunction,
+                 success:succFunction
+             })
+             function LoadFunction(){
+               $("#list2").html('loading');
+             }
+             function erryFunction(){
+                 alert('error');
+             }
+             function succFunction(tt){
+                 var json =eval(tt);
+                 var tt=""
+                 $.each(json,function(index){
+                  var Question_mark_chapter_difficult= json[index].Question_mark_chapter;
+                  var Question_description= json[index].Question_description;
+                  var Question_type= json[index].Question_type;
+                  var Question_feature= json[index].Question_feature;
+                  var Question_point= json[index].Question_point;
+                  var Question_categery= json[index].Question_categery;
+                  var Question_default_answer= json[index].Question_default_answer;
+                  tt += Question_description+"___"+Question_feature+ "___"+Question_point+"___"+Question_type+"<br>";
+             });
+
+                $("#list2").html('');
+                 $("#list2").html(tt);
+             }
+        });
+       </script>
+    </head>
+    <body>
+        <ul id='list2'>
+    </body>
+</html> 

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+    </head>
+    <body>
+        <hr/>
+        结果分析界面
+    <hr/>
+ <form action="{{request.path}}" method='POST' enctype='multipart/form-data'>
+            {% csrf_token %}
+            <ul>
+
+                <li>考试批次 {{form.form_sametermpaperid}}</li>
+                <li>分数范围 {{form.form_pointrange}}</li>
+            </ul>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+       平均分：{{AVG}} 
+    </body>
+</html>

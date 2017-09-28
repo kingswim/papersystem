@@ -1,0 +1,102 @@
+https://stackoverflow.com/questions/14642130/how-to-response-ajax-request-in-django
+
+How to response ajax request in Django
+Ask Question
+
+提交json时侯可以看下这个url
+
+
+接受试卷时需要确定问卷id，问题id，问题question，经学生回答后，补全问题答案
+
+提交的时侯是问卷id，问题id，学生答案
+
+
+以下是筛选问题时的优化
+https://stackoverflow.com/questions/1731346/how-to-get-two-random-records-with-django/6405601#6405601
+
+现在筛选4个客观题，1个主观题形成试卷，但需要两个sql语句,希望能合并
+
+在分片情况下不能用record = record1|record2
+
+
+学生自定义试卷的过程
+学生获取试卷-->怎么获取？试卷必需同步到数据库。
+
+生成问卷，根据章节，难度，负数，生成10张问卷
+问卷带有
+
+---------------------------------------------------------
+客观题和主观题各自选取前几条，然后合并
+可以在一个sql语句中实现，用索引
+就是看django怎么实现了？
+
+
+
+http://blog.csdn.net/youmypig/article/details/8161877
+
+
+---------------------------------------------------------
+输入学生格式
+现在是 name1 |name2 |name3 |name4 |
+
+
+有待完成的是csv,excel导入功能，还要用到上传
+---------------------------------------------------------
+
+
+
+那么这个输入就是从textarea输入学生学号，输入批改教师id，获取问卷，生成学生答眷表
+
+学生答卷表  答卷id  ，学生id，教师id，问卷id
+
+老师根据n个学生id生成试卷，for   n次，然后加入n个学生id
+
+老师生成试卷  生成试卷id ，试卷对应的教师id（自动教师id为普通），试卷班级
+
+老师设置考试开始时间
+
+学生获取试卷 怎么获取？z
+
+
+--->学生发一个学生id过去，先连接获取试卷界面--->同时生成学生答卷表-->(同时学生表里面加入试卷id字段)
+
+\
+
+图表功能添加
+https://github.com/flot/flot
+-----------------------------------------------------------------
+题库创建-------------questioncreate
+
+生成问卷-------------generatqpaper
+
+根据输入学生的名字编号 生成学生对应的答卷表，随机获取对应问卷表的id  -------
+generate1Apaper
+
+
+
+学生拿到问卷------------openQpaperjson
+
+学生输入学号开始进入答卷-----------stulookpaper  答卷操作在foo.html文件中进行
+
+学生返回json格式的答卷，--------recieveanswer 接受学生答卷,写入数据库答卷表
+
+老师批改试卷,------------teachlookpaper
+
+老师查看试卷完成情况，-------------teachlookapapersitu
+
+
+
+
+老师考试index --------------------teachpaperindex
+                                                  ------questioncreate  题库维护
+                                                  ------generatqpaperbef   问卷生成
+                                                  ------generate1Apaper  学生绑定，答卷生成
+                                                  ------teachlookpaper    查看待批改的答卷
+                                                  ------teachlookapapersitu  查看本次考试结果
+
+学生考试 index --------------------stupaperindex
+                                                  
+                                                  ------generatqpaper   问卷生成
+                                                  ------generate1Apaper 只能是学生自己，绑定学生自己
+                                                  ------stulookpaper  进入考试
+                                                  ------stulookresult  查看考试结果

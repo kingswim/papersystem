@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html >
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" type="image/x-icon" href="https://production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />
+  <link rel="mask-icon" type="" href="https://production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" />
+  <title>CodePen - json to survey</title>
+  
+  
+  
+  
+      <style>
+      body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+}
+.form {
+  margin: 0 40px;
+  width: 500px;
+}
+
+.question {
+  margin: 15px 0;
+}
+.question .q-title {
+  display: block;
+  font-weight: 700;
+  padding-bottom: 5px;
+}
+.question {
+  width: 400px;
+}
+.question input[type = 'text'],
+.question textarea {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
+  width: 400px;
+}
+.question label {
+  margin-left: 5px
+}
+.question .elem-radio-check {
+  padding-bottom: 5px;
+}
+
+.error > label{
+  color: red;
+}
+.form .submit-btn {
+  background-color: #337ab7;
+  background-image: none;
+  border-color: #2e6da4;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  color: #fff;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  margin-bottom: 0;
+  padding: 6px 12px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.form .title {
+  border-bottom: 1px solid #eee;
+  font-size: 36px;
+  font-weight: 500;
+  margin: 40px 0 20px;
+  padding-bottom: 9px;
+}
+.form form {
+  margin-left: 10px;
+}
+    </style>
+
+  
+{%load static%}
+  
+  
+  
+</head>
+
+<body translate="no" >
+
+  <div id="main" class = 'form'></div>
+  
+  <script src='{% static "jsonToSurvey.min.js" %} '></script>
+
+    <script>
+    var doSomething = function(err, values) {
+    console.log(err, values);
+  };
+
+  var schema = {
+    options: {
+      hideNotReq: true
+    },
+    title: {
+      label: 'Insert Title here', className: 'title'
+    },
+    submitButton: {
+      label: 'Submit', className: 'submit-btn' 
+    },
+    onSubmit: doSomething,
+    body: [
+      {label: '1. Question', tag: 'input', type: 'text',
+        skip: {
+          cond: '=',
+          val: 'yes',
+          questions: [1, 2]
+        }
+      },
+
+      {label: '2. Second question', tag: 'textarea', placeholder: 'fill this'},
+
+      {label: '3. Another question', tag: 'radio', 
+       data : [ 
+        {'value': '1', 'label': 'option 1'},
+        {'value': '2', 'label': 'option 2'},
+        {'value': '3', 'label': 'option 3'}
+       ],
+       skip: [
+        {val: '1', cond: '=', questions: [0]},
+        {val: '2', cond: '=', questions: [1]},
+        {val: '3', cond: '=', questions: [4]}
+       ]
+      },
+      {label: '4. You almost finish', tag: 'checkbox', data : [ 
+        {'value': '4', 'label': 'option 4'},
+        {'value': '5', 'label': 'option 5'},
+        {'value': '6', 'label': 'option 6'}
+      ]},
+      {label: '5. This is the last one', tag: 'textarea'}
+    ]
+  };
+
+new Survey().create(document.getElementById('main'), schema);
+  </script>
+
+  
+  
+
+</body>
+</html>

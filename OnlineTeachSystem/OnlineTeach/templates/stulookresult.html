@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+    </head>
+    <body>
+            <hr/>
+        <p>
+            考试查询界面
+        </p>
+            <hr/>
+        <form action="{{request.path}}" method='POST' enctype='multipart/form-data'>
+            {% csrf_token %}
+            考试号{{form1.form_sametermpaperid}}
+            学生名字或学号{{form1.form_stuid}}
+         <button type="submit" class="btn btn-primary">提交</button>      </form>
+
+        <hr/>
+        考试编号&nbsp &nbsp &nbsp &nbsp 分数 &nbsp &nbsp &nbsp &nbsp 对错题数  &nbsp &nbsp &nbsp &nbsp教师评语
+            <ul>
+                {% for key,value  in d.items %}
+                <li>
+                 {{value}}
+             </li>    
+                {%endfor%}
+         </ul>    
+    </body>
+</html>

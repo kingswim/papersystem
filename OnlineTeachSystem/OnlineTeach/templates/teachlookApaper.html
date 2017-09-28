@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+    </head>
+    <body>
+        <form action="{{request.path}}" method='POST' enctype='multipart/form-data'>
+            {% csrf_token %}
+            考试号{{form1.form_sametermpaperid}}
+            学生名字或学号{{form1.form_stuid}}
+            {{Qpaperid}}&nbsp {{stuid}}&nbsp {{middlemark}}分 &nbsp {{middleresult}}对错题
+            <ul>
+            {%for i in list2%}
+                <li>
+                {%for j in i%}
+                    {{j|safe}} &nbsp &nbsp
+                {%endfor%}
+                </li>
+            {%endfor%}
+            </ul>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+        <hr/>
+        <p>
+            成绩批改界面
+        </p>
+        <hr/>
+        <form action="{{request.path}}" method='POST' enctype='multipart/form-data'>
+            {% csrf_token %}
+            <ul>
+            <li>考试批次{{form2.form_compaperid}}</li>
+            <li>学号{{form2.form_comstuid}}</li>
+            <li>终级分数{{form2.form_endpoint}}</li>
+            <li>教师评论{{form2.form_comment}}</li>
+            <li>考试情况{{form2.form_resultradio}}</li>
+            </ul>
+
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </body>
+</html>

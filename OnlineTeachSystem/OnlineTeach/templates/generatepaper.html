@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+    </head>
+    <body>
+        <form action="{%url 'generateqpaper'%}" method='GET' enctype='multipart/form-data'>
+            <ul>
+                <li>输入难度生成考试 {{form.form_difficult}}</li>
+                <li>输入习题分数生成考试 {{form.form_mark}}</li>
+                <li>输入章节生成考试 {{form.form_chapter}}</li>
+                <li>输入老师 {{form.form_teacher_name}}</li>
+            </ul>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+    </head>
+    <body>
+        <form action="{{request.path}}" method='POST' enctype='multipart/form-data'>
+            {% csrf_token %}
+            <ul>
+                <li>问题编号 {{form.form_Question_id}}</li>
+                <li>问题描述 {{form.form_Question_description}}</li>
+                <li>问题分值 {{form.form_Question_point}}</li>
+                <li>问题特点 {{form.form_Question_feature}}</li>
+                <li>选择题1,主观题2 {{form.form_Question_type}}</li>
+                <li>选择题1选项按|分隔,主观题输入empty {{form.form_Question_label}}</li>
+                <li>问题默认答案 {{form.form_Question_default_answer}}</li>
+                <li>问题分类 {{form.form_Question_categery}}</li>
+
+            </ul>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+ 
+    </body>
+</html>

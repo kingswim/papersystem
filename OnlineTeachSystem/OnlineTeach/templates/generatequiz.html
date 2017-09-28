@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+    </head>
+    <body>
+        <form action="{{request.path}}" method='POST' enctype='multipart/form-data'>
+            {% csrf_token %}
+            <ul>
+
+                <li>问题难度 {{form.form_difficult}}</li>
+                <li>问题分数 {{form.form_mark}}</li>
+                <li>问题章节 {{form.form_chapter}}</li>
+            {%for i in list1  %}
+                <li>{{i}}</li>
+            {% endfor %}
+            </ul>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </body>
+</html>
