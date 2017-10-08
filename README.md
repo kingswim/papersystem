@@ -9,4 +9,4 @@ a test quiz and paper in dango
 
 2.生成试卷的函数要分散读写，现在直接插入数据不合适
 
-
+3.实现为django－channel的websocket
